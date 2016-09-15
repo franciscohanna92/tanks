@@ -1,0 +1,26 @@
+{
+  "name": "tanks",
+  "authors": [
+    "Francisco Hanna <franciscohanna92@gmail.com>"
+  ],
+  "description": "tanks game in p5js",
+  "main": "index.html",
+  "keywords": [
+    "tanks",
+    "game",
+    "p5js"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "p5.js": "p5js#^0.5.3"
+  }
+}
