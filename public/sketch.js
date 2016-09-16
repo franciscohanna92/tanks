@@ -1,5 +1,6 @@
 var tank;
-var vel = 4;
+var vel = 5;
+var bullets = [];
 
 function setup(){
 	createCanvas(400,400);
@@ -7,9 +8,13 @@ function setup(){
 }
 
 function draw(){
-	background(153, 76, 0);
+	background(51);
 	tank.show();
 	tankControls();
+	for (var i = 0; i < bullets.length; i++) {
+		bullets[i].show();
+		bullets[i].update();
+	}
 }
 
 function tankControls() {
@@ -29,6 +34,8 @@ function tankControls() {
 }
 
 function keyPressed(){
-	if(keyCode === SHIFT)
-		console.log('Boom!');
+	if(key === ' '){
+		bullet = new Bullet(tank.center.x, tank.center.y, tank.facing);
+		bullets.push(bullet);
+	}
 }

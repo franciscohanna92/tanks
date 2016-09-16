@@ -1,40 +1,49 @@
 function Tank(x, y, s){
-	this.c = createVector(x,y);
-	this.s = s;
-	this.d = createVector(x + s, y);
+	this.center = createVector(x,y);
+	this.size = s;
+	this.dir = createVector(x + s, y);
+	this.facing = 'right';
 
 	this.show = function(){
+		strokeWeight(1);
 		rectMode(RADIUS);
 		fill(73, 160, 32);
-		rect(this.c.x, this.c.y, this.s, this.s);
+		rect(this.center.x, this.center.y, this.size, this.size);
 
 		stroke(73, 100, 32);
 		strokeWeight(3);
-		line(this.c.x, this.c.y, this.d.x, this.d.y);
+		line(this.center.x, this.center.y, this.dir.x, this.dir.y);
 
 		fill(73, 80, 32);
-		ellipse(this.c.x, this.c.y, this.s, this.s);
+		ellipse(this.center.x, this.center.y, this.size, this.size);
 	}
 
 	this.move = function(x,y){
-		this.c.x += x;
-		this.c.y += y;
+		this.center.x += x;
+		this.center.y += y;
 	}
 
 	this.lookUp = function(){
-		this.d.x = this.c.x;
-		this.d.y = this.c.y - this.s;
+		this.dir.x = this.center.x;
+		this.dir.y = this.center.y - this.size;
+		this.facing = 'up';
 	}
+
 	this.lookRight = function(){
-		this.d.x = this.c.x + this.s;
-		this.d.y = this.c.y;
+		this.dir.x = this.center.x + this.size;
+		this.dir.y = this.center.y;
+		this.facing = 'right';
 	}
+
 	this.lookDown = function(){
-		this.d.x = this.c.x;
-		this.d.y = this.c.y + this.s;
+		this.dir.x = this.center.x;
+		this.dir.y = this.center.y + this.size;
+		this.facing = 'down';
 	}
+
 	this.lookLeft = function(){
-		this.d.x = this.c.x - this.s;
-		this.d.y = this.c.y;
+		this.dir.x = this.center.x - this.size;
+		this.dir.y = this.center.y;
+		this.facing = 'left';
 	}
 }
