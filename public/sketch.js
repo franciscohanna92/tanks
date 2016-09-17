@@ -1,36 +1,58 @@
+// Variable para mantener la conexion a traves del socket
+var socket;
+
+var vel = 6;
+
 var tank;
-var vel = 5;
+var tanks = [];
 var bullets = [];
 
 function setup(){
-	createCanvas(400,400);
-	tank = new Tank(random(width), random(height), 24);
+	createCanvas(350, 350);
+	socket = io.connect('http://192.168.1.41:1137', {'force new connection': true });
+
+	tank = new Tank(random(0, width), random(0, height), 24, 'right');
+
+	var data = {
+		cx: tank.center.x,
+		cy: tank.center.y,
+		r: 	tank.radius,
+		f: 	tank.facing
+	};
+	socket.emit('start',data);	
+
+	socket.on('heartbeat', function(data){
+		tanks = data;
+		//console.log(data);
+	});
 }
 
 function draw(){
 	background(51);
 	tank.show();
 	tankControls();
+	// Mostrar balas disparadas
 	for (var i = 0; i < bullets.length; i++) {
 		bullets[i].show();
-		bullets[i].update();
 	}
-}
 
-function tankControls() {
-	if(keyIsDown(UP_ARROW)){
-		tank.move(0, -vel);
-		tank.lookUp();
-	} else if (keyIsDown(RIGHT_ARROW)) {
-		tank.move(vel, 0);
-		tank.lookRight();
-	} else if (keyIsDown(DOWN_ARROW)) {
-		tank.move(0, vel);
-		tank.lookDown();
-	} else if (keyIsDown(LEFT_ARROW)) {
-		tank.move(-vel, 0);
-		tank.lookLeft();
+	// Mostrar tanques de otros jugadores
+	for (var i = 0; i < tanks.length; i++) {
+		id = tanks[i].id;
+		if (id.substring(2, id.length) !== socket.id) {
+			var mpTank = new Tank(tanks[i].centerX, tanks[i].centerY, tanks[i].radius, tanks[i].facing);
+			mpTank.show();
+			//console.log(mpTank);
+		}
 	}
+	
+	var data = {
+		cx: tank.center.x,
+		cy: tank.center.y,
+		r: 	tank.radius,
+		f: 	tank.facing
+	};
+	socket.emit('update', data);
 }
 
 function keyPressed(){
@@ -38,4 +60,25 @@ function keyPressed(){
 		bullet = new Bullet(tank.center.x, tank.center.y, tank.facing);
 		bullets.push(bullet);
 	}
+}
+
+function tankControls(){
+	if(keyIsDown(87)){
+		// UP
+		tank.update(0, -vel);
+		tank.facing = 'up';
+	} else if (keyIsDown(68)) {
+		// RIGHT
+		tank.update(vel, 0);
+		tank.facing = 'right';
+	} else if (keyIsDown(83)) {
+		// DOWN
+		tank.update(0, vel);
+		tank.facing = 'down';
+	} else if (keyIsDown(65)) {
+		// LEFT
+		tank.update(-vel, 0);
+		tank.facing = 'left';		
+	}
+
 }

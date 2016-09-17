@@ -1,24 +1,24 @@
 function Bullet(x, y, d){
 	this.pos = createVector(x, y);
-	this.r = 12;
-	this.v = 10;
+	this.radius = 4;
+	this.vel = 20;
 	this.dir = d;
 
 	this.show = function(){
 		strokeWeight(1);
-		fill(255, 0, 0);
-		ellipse(this.pos.x, this.pos.y, this.r, this.r);
-	}
-
-	this.update = function(){
+		fill(200, 200, 0);
 		if (this.dir == 'up') {
-			this.pos.y -= this.v;
+			ellipse(this.pos.x, this.pos.y - 30, this.radius, this.radius + 8);
+			this.pos.y -= this.vel;
 		} else if (this.dir == 'right') {
-			this.pos.x += this.v;
+			ellipse(this.pos.x + 30, this.pos.y, this.radius + 8, this.radius);
+			this.pos.x += this.vel;
 		} else if (this.dir == 'down'){
-			this.pos.y += this.v;
+			ellipse(this.pos.x, this.pos.y + 30, this.radius, this.radius + 8);
+			this.pos.y += this.vel;
 		} else if (this.dir == 'left') {
-			this.pos.x -= this.v;
+			ellipse(this.pos.x - 30, this.pos.y, this.radius + 8, this.radius);
+			this.pos.x -= this.vel;
 		}
 	}
 }
