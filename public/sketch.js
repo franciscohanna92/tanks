@@ -9,15 +9,21 @@ var bullets = [];
 
 function setup(){
 	createCanvas(350, 350);
-	socket = io.connect('http://192.168.1.41:1137', {'force new connection': true });
+	socket = io.connect('http://localhost:3000', {'force new connection': true });
 
-	tank = new Tank(random(0, width), random(0, height), 24, 'right');
+	var tankColor = {
+					 'r': random(100, 255).toFixed(0), 
+					 'g': random(100, 255).toFixed(0), 
+					 'b': random(100, 255).toFixed(0)
+					};
+	tank = new Tank(random(0, width), random(0, height), 24, 'right', tankColor);
 
 	var data = {
-		cx: tank.center.x,
-		cy: tank.center.y,
-		r: 	tank.radius,
-		f: 	tank.facing
+		cx: 	tank.center.x,
+		cy: 	tank.center.y,
+		r: 		tank.radius,
+		f: 		tank.facing, 
+		col: 	tank.color
 	};
 	socket.emit('start',data);	
 
@@ -31,6 +37,7 @@ function draw(){
 	background(51);
 	tank.show();
 	tankControls();
+
 	// Mostrar balas disparadas
 	for (var i = 0; i < bullets.length; i++) {
 		bullets[i].show();
@@ -40,17 +47,18 @@ function draw(){
 	for (var i = 0; i < tanks.length; i++) {
 		id = tanks[i].id;
 		if (id.substring(2, id.length) !== socket.id) {
-			var mpTank = new Tank(tanks[i].centerX, tanks[i].centerY, tanks[i].radius, tanks[i].facing);
+			var mpTank = new Tank(tanks[i].centerX, tanks[i].centerY, tanks[i].radius, tanks[i].facing, tanks[i].color);
 			mpTank.show();
 			//console.log(mpTank);
 		}
 	}
 	
 	var data = {
-		cx: tank.center.x,
-		cy: tank.center.y,
-		r: 	tank.radius,
-		f: 	tank.facing
+		cx:  tank.center.x,
+		cy:  tank.center.y,
+		r: 	 tank.radius,
+		f: 	 tank.facing,
+		col: tank.color
 	};
 	socket.emit('update', data);
 }

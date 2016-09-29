@@ -1,8 +1,9 @@
-function Tank(x, y, r, f){
-	this.center = createVector(x,y);
-	this.radius = r;
-	this.dir = createVector(x + r, y);
-	this.facing = f;
+function Tank(x, y, r, f, c){
+	this.center 	= createVector(x,y);
+	this.radius 	= r;
+	this.dir 		= createVector(x + r, y);
+	this.facing 	= f;
+	this.color 		= c;
 
 	this.show = function(){
 		if(this.facing == 'up'){
@@ -22,7 +23,7 @@ function Tank(x, y, r, f){
 		// Cuerpo del tanque
 		strokeWeight(1);
 		rectMode(RADIUS);
-		fill(73, 160, 32);
+		fill(this.color.r, this.color.g, this.color.b);
 		rect(this.center.x, this.center.y, this.radius, this.radius);
 
 		// Cañon

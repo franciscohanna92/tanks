@@ -2,12 +2,13 @@
 var tanks = [];
 
 // Constructor de tanque
-function Tank(id, cx, cy, r, dx, dy, f){
+function Tank(id, cx, cy, r, f, c){
 	this.id 		= id;
 	this.centerX 	= cx;
 	this.centerY 	= cy;
 	this.radius		= r;
 	this.facing		= f;
+	this.color 		= c;
 }
 
 // Importamos modulo ExpressJS
@@ -17,7 +18,7 @@ var express = require('express');
 var app = express();
 
 // Pnemos a escuchar nuestro servidor
-var server = app.listen(1137, '192.168.1.41', listenCallback);
+var server = app.listen(3000, 'localhost', listenCallback);
 function listenCallback(){
 	console.log('Server escuchando en ' + server.address().address + ':' + server.address().port);
 }
@@ -42,27 +43,35 @@ io.sockets.on('connection', function(socket){
 	console.log('Nuevo jugador conectado. ID: ' + socket.id);
 
 	socket.on('start', function(data){
-		console.log(socket.id + " " + data.cx + " " + data.cy + " " + data.r + " " + data.f);
-		var tank = new Tank(socket.id, data.cx, data.cy, data.r, data.f);
+		console.log(socket.id + " " + data.cx + " " + data.cy + " " + data.r + " " + data.f + " " + data.col.r);
+		var tank = new Tank(socket.id, data.cx, data.cy, data.r, data.f, data.col);
 		tanks.push(tank);
 	});
 
 	socket.on('update', function(data){
-		console.log(socket.id + " " + data.cx + " " + data.cy + " " + data.r + " " + data.f);
+		// console.log(socket.id + " " + data.cx + " " + data.cy + " " + data.r + " " + data.f + " " + data.col);
 		var tank;
 		for (var i = 0; i < tanks.length; i++) {
 			if(socket.id == tanks[i].id){
 				tank = tanks[i];
+				break;
 			}
 		}
 		tank.centerX	= data.cx;
 		tank.centerY	= data.cy;
 		tank.radius		= data.r;
 		tank.facing		= data.f;
+		tank.color 		= data.col;
 	});
 
-  	socket.on('disconnect', function() {
-      console.log("Un jugador se ha desconectado :(");
-    });
+	socket.on('disconnect', function() {
+		console.log("Un jugador se ha desconectado :(");
+		for (var i = 0; i < tanks.length; i++) {
+			if(socket.id == tanks[i].id){
+				tanks.splice(i,1);
+				break;
+			}
+		}
+	});
 });
 
