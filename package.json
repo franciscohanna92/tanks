@@ -1,0 +1,24 @@
+{
+  "name": "tanks",
+  "version": "1.0.0",
+  "description": "tanks game with p5js and node for networking",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FranciscoHanna/tanks.git"
+  },
+  "author": "clonosaurio",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/FranciscoHanna/tanks/issues"
+  },
+  "homepage": "https://github.com/FranciscoHanna/tanks#readme",
+  "dependencies": {
+    "express": "^4.14.0",
+    "socket.io": "^1.4.8"
+  }
+}
