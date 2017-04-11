@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/FranciscoHanna/tanks#readme",
   "dependencies": {
-    "express": "^4.14.0",
-    "socket.io": "^1.4.8"
+    "express": "^4.15.2",
+    "socket.io": "^1.7.3"
   }
 }

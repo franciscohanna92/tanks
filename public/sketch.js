@@ -1,22 +1,25 @@
 // Variable para mantener la conexion a traves del socket
 var socket;
 
-var vel = 6;
-
+var tankVelocity = 1;
 var tank;
 var tanks = [];
 var bullets = [];
 
+// Variable para deteccion de colison 
+var hit = false;
+var canvas;
+
 function setup(){
-	createCanvas(350, 350);
+	canvas = createCanvas(800, 600);
 	socket = io.connect('http://localhost:3000', {'force new connection': true });
 
 	var tankColor = {
-					 'r': random(100, 255).toFixed(0), 
-					 'g': random(100, 255).toFixed(0), 
-					 'b': random(100, 255).toFixed(0)
-					};
-	tank = new Tank(random(0, width), random(0, height), 24, 'right', tankColor);
+		'r': random(100, 255).toFixed(0), 
+		'g': random(100, 255).toFixed(0), 
+		'b': random(100, 255).toFixed(0)
+	};
+	tank = new Tank(width/2, height/2, 24, 'right', tankColor);
 
 	var data = {
 		cx: 	tank.center.x,
@@ -31,16 +34,31 @@ function setup(){
 		tanks = data;
 		//console.log(data);
 	});
+
+	collideDebug(true, 10 , "#aa0000");
 }
 
-function draw(){
-	background(51);
+function draw() {
+	background(32);
+
 	tank.show();
 	tankControls();
 
+	// translate(width/2 - tank.center.x, height/2 - tank.center.y);
+
+	rectMode(CORNER);
+	stroke(0)
+	strokeWeight(0);
+	fill("blue");
+	rect(100, 100, 50, 50);
+
 	// Mostrar balas disparadas
-	for (var i = 0; i < bullets.length; i++) {
+	for (var i = bullets.length - 1; i >= 0; i--) {
 		bullets[i].show();
+		hit = collideLineRect(bullets[i].ini.x, bullets[i].ini.y, bullets[i].fin.x ,bullets[i].fin.y, 100, 100, 50, 50);
+		if(bullets[i].mustDestroy() || hit) {
+			bullets.splice(i,1);
+		}
 	}
 
 	// Mostrar tanques de otros jugadores
@@ -60,33 +78,39 @@ function draw(){
 		f: 	 tank.facing,
 		col: tank.color
 	};
+
 	socket.emit('update', data);
 }
 
+
+/**** TANK CONTROLS ****/
+var enableShoot = true;
+setInterval(function(){ enableShoot = true; }, 0);
 function keyPressed(){
-	if(key === ' '){
-		bullet = new Bullet(tank.center.x, tank.center.y, tank.facing);
-		bullets.push(bullet);
+	if(enableShoot == true) {
+		if(key === ' '){
+			bullet = new Bullet(tank.center.x, tank.center.y, tank.facing);
+			bullets.push(bullet);
+			enableShoot = false;
+		}
 	}
 }
-
 function tankControls(){
 	if(keyIsDown(87)){
 		// UP
-		tank.update(0, -vel);
+		tank.update(0, -tankVelocity);
 		tank.facing = 'up';
 	} else if (keyIsDown(68)) {
 		// RIGHT
-		tank.update(vel, 0);
+		tank.update(tankVelocity, 0);
 		tank.facing = 'right';
 	} else if (keyIsDown(83)) {
 		// DOWN
-		tank.update(0, vel);
+		tank.update(0, tankVelocity);
 		tank.facing = 'down';
 	} else if (keyIsDown(65)) {
 		// LEFT
-		tank.update(-vel, 0);
+		tank.update(-tankVelocity, 0);
 		tank.facing = 'left';		
 	}
-
 }

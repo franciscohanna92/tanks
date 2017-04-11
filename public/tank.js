@@ -22,6 +22,7 @@ function Tank(x, y, r, f, c){
 
 		// Cuerpo del tanque
 		strokeWeight(1);
+		stroke(73, 100, 32);
 		rectMode(RADIUS);
 		fill(this.color.r, this.color.g, this.color.b);
 		rect(this.center.x, this.center.y, this.radius, this.radius);

@@ -11,8 +11,7 @@
     "p5js"
   ],
   "license": "MIT",
-  "homepage": "",
-  "private": true,
+  "homepage": "https://github.com/FranciscoHanna/tanks",
   "ignore": [
     "**/.*",
     "node_modules",
@@ -21,6 +20,6 @@
     "tests"
   ],
   "dependencies": {
-    "p5.js": "p5js#^0.5.3"
+    "p5.js": "p5js#^0.5.8"
   }
 }
